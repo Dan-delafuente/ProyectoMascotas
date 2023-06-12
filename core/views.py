@@ -74,13 +74,20 @@ def delete(request, id):
 # Create your views here.
 
 ### productos de la tienda
-@login_required
 def shop(request):
-    productosAll = Producto.objects.all() ## SELECT * FROM producto
+    categoria = request.GET.get('categoria')  # Obtener el parámetro 'categoria' de la URL
+
+    # Filtrar los productos por categoría si se proporciona la categoría en la URL
+    if categoria:
+        productosAll = Producto.objects.filter(categoria=categoria)
+    else:
+        productosAll = Producto.objects.all()  # Obtener todos los productos si no se proporciona una categoría
+
     data = {
-        'listado' : productosAll
+        'listado': productosAll
     }
     return render(request, 'core/shop.html', data)
+
 
 
 
@@ -123,6 +130,7 @@ def worker(request):
 def about(request):
     return render(request, ('core/about.html'))
 
+##### CARRITO 
 @login_required
 def cart(request):
     response = requests.get('https://mindicador.cl/api/dolar')
@@ -134,7 +142,7 @@ def cart(request):
 
     for item in cart.cart.values():
         cart_items.append({
-            'image': item['image'],
+            'imagen': item['imagen'],
             'nombre': item['nombre'],
             'precio': item['precio'],
             'stock': item['stock'],
@@ -165,9 +173,9 @@ def thankyou(request):
 
 def register(request):
 	if request.method == "POST":
-		form = NewUserForm(request.POST)
-		if form.is_valid():
-			user = form.save()
+		cuenta = NewUserForm(request.POST)
+		if cuenta.is_valid():
+			user = cuenta.save()
 			login(request, user)
 			messages.success(request, "Registration successful." )
 			return redirect("core/index.html")
@@ -200,23 +208,22 @@ def shop_api(request):
     return render(request, 'core/shop-api.html', data)
 
 
-
 #################################
 #### CARRITO TEST
 def ver_carrito(request):
     cart = Cart(request)
-    return render(request, 'cart.html', {'cart': cart.cart})
+    return render(request, 'core/cart.html', {'cart': cart.cart})
 
 def add_to_cart(request, producto_id):
     producto = Producto.objects.get(pk=producto_id)
     cart = Cart(request)
     cart.add(producto)
-    return render(request, 'cart.html', {'cart': cart.cart})
+    return render(request, 'core/cart.html', {'cart': cart.cart})
 
 def remove_from_cart(request, producto_id):
     cart = Cart(request)
     cart.remove(producto_id)
-    return render(request, 'cart.html', {'cart': cart.cart})
+    return render(request, 'core/cart.html', {'cart': cart.cart})
 
 def decrement_cart_item(request, producto_id):
     producto = Producto.objects.get(id=producto_id)
@@ -226,5 +233,11 @@ def decrement_cart_item(request, producto_id):
 
 def clear_cart(request):
     cart = Cart(request)
+
     cart.clear()
     return redirect('cart')
+
+
+########################################## REGISTER
+
+

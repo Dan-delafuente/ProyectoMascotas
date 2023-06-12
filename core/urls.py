@@ -29,8 +29,9 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('shop-api/', shop_api, name="shop-api"),
     ##
+    path('ver_carrito/<str:producto_id>', ver_carrito, name='ver_carrito'),
     path('add-to-cart/<int:producto_id>/', add_to_cart, name='add_to_cart'),
     path('remove-from-cart/<int:producto_id>/', remove_from_cart, name='remove_from_cart'),
-    path('decrement-cart-item/<int:producto_id>/', decrement_cart_item, name='decrement_cart_item'),
+    path('decrement_cart_item/<int:producto_id>/', decrement_cart_item, name='decrement_cart_item'),
     path('clear-cart/', clear_cart, name='clear_cart'),
 ]

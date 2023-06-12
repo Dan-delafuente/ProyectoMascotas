@@ -1,3 +1,4 @@
+register.html
 {% extends 'core/base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -13,31 +14,32 @@
 
 
 
-{% load crispy_forms_tags %}         
+{% load crispy_forms_tags %}
 
-<!--Register--> 
+<!--Register-->
 <div class="main-w3layouts wrapper">
 	<h1>Registrate</h1>
 	<div class="main-agileinfo">
 		<div class="agileits-top">
-			<form action="" method="POST"enctype="multipart/form-data">
-		{% csrf_token %}
-		<table>
-		{{ register_form|crispy }} 
-		</table>
-		<br><br>            
-		<input type="submit" class="btn btn-success" value="Registrarme">
-	</form>
-	<p>Tienes una cuenta? <a href="{% url 'login' %}"> Inicia sesión!</a></p>
-</div>
-</div>
+			<form action="" method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<table>
+					{{ register_form|crispy }}
+				</table>
+				<br><br>
+				<input type="submit" class="btn btn-success" value="Registrarme">
+			</form>
+			<p>Tienes una cuenta? <a href="{% url 'login' %}"> Inicia sesión!</a></p>
+		</div>
+	</div>
 
 
 
-{% endblock%}
+	{% endblock%}
 
 
-{% block js%}
+	{% block js%}
 
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-{% endblock%}
+	<script
+		type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+	{% endblock%}

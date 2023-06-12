@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 ## Para crear un template de un formulario
 
 class ProductosForm(ModelForm):
+
     nombre = forms.CharField(min_length=4, widget=forms.TextInput(attrs={"placeholder": "Ingrese Nombre"}))
     precio = forms.IntegerField(min_value=0, widget=forms.NumberInput(attrs={"placeholder": "Ingrese Precio"}))
     stock = forms.IntegerField(min_value=0, widget=forms.NumberInput(attrs={"placeholder": "Ingrese Stock"}))
@@ -19,10 +20,6 @@ class ProductosForm(ModelForm):
         model = Producto
         fields = '__all__'
     
-    ###### ESTA FUNCION HACE QUE EL CAMPO ID NO PUEDA SER MODIFICABLE OCUPANDO EL READONLY 
-    def __init__(self, *args, **kwargs):
-        super(ProductosForm, self).__init__(*args, **kwargs)
-        self.fields['id'].widget = forms.TextInput(attrs={"readonly": "readonly"})
 
 
 # Create your forms here.

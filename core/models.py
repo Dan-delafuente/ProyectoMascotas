@@ -1,6 +1,9 @@
 from django.db import models
 from django.utils import timezone
 import datetime
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import Permission
+from .cart import *
 
 # Create your models here.
 
@@ -12,7 +15,6 @@ class TipoProducto(models.Model):
 
 ## A CLASE SE LE MODIFICO ELIMINANDOLE LOS CAMPOS INNESEARIOS COMO FECHA Y VIGENCIA
 class Producto(models.Model):
-    id = models.AutoField(primary_key=True) ### SE AGREGA ELL CAMPO ID Y SE PONE COMO CLAVE PRIMARIA 
     nombre = models.CharField(max_length=30)
     precio = models.IntegerField()
     stock = models.IntegerField()
@@ -33,3 +35,21 @@ class Cuenta(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+    
+class Carrito(models.Model):
+    cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
+    productos = models.ManyToManyField(Producto, through='ItemCarrito')
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Carrito #{self.id}"
+
+
+class ItemCarrito(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.IntegerField()
+
+    def __str__(self):
+        return f"ItemCarrito #{self.id} - Carrito #{self.carrito_id}"

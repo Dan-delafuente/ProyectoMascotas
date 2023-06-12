@@ -14,3 +14,11 @@ class ProductoSerializer(serializers.ModelSerializer):
         model = Producto
         fields = '__all__'
 
+
+
+class CuentaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cuenta
+        fields = ['nombre', 'contraseña', 'correo', 'fecha_creacion']
+
+

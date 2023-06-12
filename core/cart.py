@@ -1,4 +1,4 @@
-#from .models import *
+from .models import *
 
 class Cart:
     def __init__(self, request):
@@ -8,29 +8,25 @@ class Cart:
         if not cart:
             cart = self.session["cart"] = {}
         self.cart = cart
-        
 
     def add(self, producto):
         if str(producto.id) not in self.cart.keys():
-            self.cart[producto.id] = {
-                "producto_id": producto.id,
+            self.cart[str(producto.id)] = {
                 "nombre": producto.nombre,
                 "stock": 1,
                 "precio": str(producto.precio),
-                "imagen": producto.imagen.url
+                "imagen": producto.imagen.url if producto.imagen else None
             }
         else:
             for key, value in self.cart.items():
                 if key == str(producto.id):
-                    value["stock"] = value["stock"] +1
+                    value["stock"] += 1
                     break
         self.save()
-
 
     def save(self):
         self.session["cart"] = self.cart
         self.session.modified = True
-
 
     def remove(self, producto_id):
         producto_id = str(producto_id)
@@ -39,20 +35,16 @@ class Cart:
             self.save()
 
     def decrement(self, producto):
-        for key, value in self.cart.items():
-            if key == str(producto.id):
-                value["stock"] = value["stock"] - 1
-                if value["stock"] < 1:
-                    self.remove(producto)
-                else:
-                    self.save()
-                break
+        producto_id = str(producto.id)
+        if producto_id in self.cart:
+            self.cart[producto_id]["stock"] -= 1
+            if self.cart[producto_id]["stock"] < 1:
+                self.remove(producto_id)
             else:
-                print("el producto no existe en el carrito")
-
+                self.save()
+        else:
+            print("El producto no existe en el carrito")
 
     def clear(self):
         self.session["cart"] = {}
         self.session.modified = True
-
-
